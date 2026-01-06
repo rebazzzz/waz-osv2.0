@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-discipline-state="active">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LIFE OS V2 | EXECUTION SYSTEM</title>
+    <meta name="description" content="Discipline enforcement system for relentless execution">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2300ff88%22>⚡</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Critical CSS for immediate rendering */
+        :root {
+            --primary-color: #00ff88;
+            --primary-dark: #00cc6a;
+            --secondary-color: #0088ff;
+            --danger-color: #ff4444;
+            --warning-color: #ffaa00;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #aaaaaa;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- System Boot Screen -->
+    <div id="boot-screen" class="boot-screen">
+        <div class="boot-terminal">
+            <div class="terminal-header">
+                <div class="terminal-title">LIFE OS V2 - SYSTEM BOOT</div>
+                <div class="terminal-controls">
+                    <span class="control red"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">Initializing Execution Protocol...</div>
+                <div class="terminal-line">Loading Disciplinary Matrix...</div>
+                <div class="terminal-line">Calibrating Performance Sensors...</div>
+                <div class="terminal-line">Authenticating User: SELF</div>
+                <div class="terminal-line">System Integrity: 100%</div>
+                <div class="terminal-line" id="boot-status">READY FOR EXECUTION</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app-container hidden">
+        <!-- System Status Bar -->
+        <div class="system-status-bar">
+            <div class="status-left">
+                <span class="system-indicator active"></span>
+                <span class="system-name">LIFE OS V2</span>
+                <span class="current-time" id="current-time">00:00</span>
+            </div>
+            
+            <div class="status-center">
+                <div class="discipline-level" id="discipline-level">
+                    <span class="level-label">DISCIPLINE:</span>
+                    <span class="level-value" id="level-value">EXECUTOR</span>
+                </div>
+                <div class="daily-streak" id="daily-streak">
+                    <span class="streak-label">STREAK:</span>
+                    <span class="streak-value">0</span>
+                </div>
+            </div>
+            
+            <div class="status-right">
+                <button class="system-btn" id="focus-mode-btn" title="Focus Mode (F)">
+                    <span>🎯</span>
+                    <span>FOCUS</span>
+                </button>
+                <button class="system-btn" id="lockdown-btn" title="Lockdown Mode (L)">
+                    <span>🔒</span>
+                    <span>LOCKDOWN</span>
+                </button>
+                <button class="system-btn" id="settings-btn" title="Settings (S)">
+                    <span>⚙️</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard">
+            <!-- Left Column: Execution Engine -->
+            <section class="execution-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="icon">⚡</span>
+                        EXECUTION ENGINE
+                        <span class="day-tag" id="current-day">MONDAY</span>
+                    </h2>
+                    <div class="panel-controls">
+                        <button class="control-btn" id="prev-day">←</button>
+                        <button class="control-btn" id="today-btn">TODAY</button>
+                        <button class="control-btn" id="next-day">→</button>
+                    </div>
+                </div>
+
+                <!-- Current Task Highlight -->
+                <div class="current-task-container" id="current-task-container">
+                    <div class="current-task-header">
+                        <h3>CURRENT EXECUTION BLOCK</h3>
+                        <div class="countdown-timer" id="countdown-timer">--:--:--</div>
+                    </div>
+                    <div class="current-task-card" id="current-task-card">
+                        <div class="task-time" id="current-task-time">--:-- - --:--</div>
+                        <div class="task-title" id="current-task-title">No active task</div>
+                        <div class="task-status" id="current-task-status">AWAITING EXECUTION</div>
+                    </div>
+                </div>
+
+                <!-- Schedule Grid -->
+                <div class="schedule-grid" id="schedule-grid">
+                    <!-- Tasks will be dynamically inserted -->
+                </div>
+
+                <!-- Task Controls -->
+                <div class="execution-controls">
+                    <button class="execution-btn success" id="complete-task">
+                        <span>✓</span>
+                        TASK COMPLETED
+                    </button>
+                    <button class="execution-btn warning" id="fail-task">
+                        <span>✗</span>
+                        LOG FAILURE
+                    </button>
+                    <button class="execution-btn secondary" id="add-micro-task">
+                        <span>+</span>
+                        EMERGENCY TASK
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Column: Analytics & Systems -->
+            <div class="right-column">
+                <!-- Score Panel -->
+                <section class="score-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">🏆</span>
+                            EXECUTION SCORE
+                        </h2>
+                        <div class="score-display" id="total-score">0</div>
+                    </div>
+                    
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span class="score-label">DAILY</span>
+                            <span class="score-value" id="daily-score">0</span>
+                            <div class="score-progress">
+                                <div class="progress-fill" id="daily-progress"></div>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">WEEKLY</span>
+                            <span class="score-value" id="weekly-score">0</span>
+                            <div class="score-progress">
+                                <div class="progress-fill" id="weekly-progress"></div>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">MONTHLY</span>
+                            <span class="score-value" id="monthly-score">0</span>
+                            <div class="score-progress">
+                                <div class="progress-fill" id="monthly-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discipline State -->
+                    <div class="discipline-state" id="discipline-state">
+                        <div class="state-indicator"></div>
+                        <div class="state-text">SYSTEM: ACTIVE</div>
+                    </div>
+                </section>
+
+                <!-- Time Honesty Panel -->
+                <section class="honesty-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">⏱️</span>
+                            TIME HONESTY
+                        </h2>
+                    </div>
+                    
+                    <div class="honesty-metrics">
+                        <div class="metric">
+                            <span class="metric-label">PLANNED</span>
+                            <span class="metric-value" id="planned-hours">0h</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">ACTUAL</span>
+                            <span class="metric-value" id="actual-hours">0h</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">DELTA</span>
+                            <span class="metric-value" id="time-delta">0h</span>
+                        </div>
+                    </div>
+                    
+                    <div class="honesty-chart">
+                        <canvas id="honesty-chart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Psychological Systems -->
+                <section class="psychology-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="icon">🧠</span>
+                            BRUTAL MIRROR
+                        </h2>
+                    </div>
+                    
+                    <div class="mirror-messages">
+                        <div class="message" id="mirror-message-1">
+                            "What you do every day matters more than what you do once in a while."
+                        </div>
+                        <div class="message" id="mirror-message-2">
+                            <span class="promise">PROMISED:</span>
+                            <span id="promised-hours">0h</span>
+                            <span class="vs">VS</span>
+                            <span class="execution">EXECUTED:</span>
+                            <span id="executed-hours">0h</span>
+                        </div>
+                    </div>
+                    
+                    <div class="burnout-indicator">
+                        <span class="indicator-label">BURNOUT RISK</span>
+                        <div class="indicator-bar">
+                            <div class="indicator-fill" id="burnout-risk">0%</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Bottom Bar: Quick Stats -->
+        <footer class="system-footer">
+            <div class="footer-stats">
+                <div class="stat">
+                    <span class="stat-label">TODAY'S EXECUTION</span>
+                    <span class="stat-value" id="today-execution">0%</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">CONSISTENCY</span>
+                    <span class="stat-value" id="consistency-rate">0%</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">FAILURES</span>
+                    <span class="stat-value" id="failure-count">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">COGNITIVE LOAD</span>
+                    <span class="stat-value" id="cognitive-load">LOW</span>
+                </div>
+            </div>
+            
+            <div class="footer-actions">
+                <button class="footer-btn" id="weekly-war-room-btn">
+                    <span>🛡️</span>
+                    WEEKLY WAR ROOM
+                </button>
+                <button class="footer-btn" id="export-data-btn">
+                    <span>💾</span>
+                    EXPORT DATA
+                </button>
+            </div>
+        </footer>
+
+        <!-- Focus Mode Overlay -->
+        <div id="focus-overlay" class="focus-overlay hidden">
+            <div class="focus-container">
+                <div class="focus-header">
+                    <h2>FOCUS MODE</h2>
+                    <button class="focus-exit" id="exit-focus">ESCAPE</button>
+                </div>
+                <div class="focus-task" id="focus-task">No task selected</div>
+                <div class="focus-timer" id="focus-timer">--:--:--</div>
+                <div class="focus-instructions">
+                    <kbd>SPACE</kbd> Complete • <kbd>F</kbd> Fail • <kbd>ESC</kbd> Exit
+                </div>
+            </div>
+        </div>
+
+        <!-- Lockdown Mode Overlay -->
+        <div id="lockdown-overlay" class="lockdown-overlay hidden">
+            <div class="lockdown-container">
+                <div class="lockdown-header">
+                    <h2>🔒 LOCKDOWN MODE ACTIVATED</h2>
+                </div>
+                <div class="lockdown-task" id="lockdown-task">No task selected</div>
+                <div class="lockdown-timer" id="lockdown-timer">--:--:--</div>
+                <div class="lockdown-warning">
+                    ⚠️ ALL DISTRACTIONS BLOCKED • ESCAPE DISABLED FOR 25 MINUTES
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="modal-overlay" class="modal-overlay hidden">
+            <!-- Settings Modal -->
+            <div class="modal" id="settings-modal">
+                <div class="modal-header">
+                    <h3>SYSTEM SETTINGS</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="setting-group">
+                        <label for="reset-time">Daily Reset Time</label>
+                        <input type="time" id="reset-time" value="05:00">
+                    </div>
+                    <div class="setting-group">
+                        <label for="punishment-threshold">Punishment Threshold (%)</label>
+                        <input type="range" id="punishment-threshold" min="50" max="90" value="70">
+                        <span id="threshold-value">70%</span>
+                    </div>
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="brutal-mode">
+                            Enable Brutal Mode (No Overrides)
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="auto-focus">
+                            Auto-enter Focus Mode
+                        </label>
+                    </div>
+                    <div class="setting-group danger">
+                        <button class="danger-btn" id="factory-reset">
+                            🚨 FACTORY RESET
+                        </button>
+                        <button class="danger-btn" id="clear-data">
+                            🗑️ CLEAR ALL DATA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly War Room Modal -->
+            <div class="modal wide-modal" id="war-room-modal">
+                <div class="modal-header">
+                    <h3>🛡️ WEEKLY WAR ROOM</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="war-room-stats">
+                        <div class="war-stat">
+                            <span class="war-label">WEEKLY SCORE</span>
+                            <span class="war-value" id="war-weekly-score">0</span>
+                        </div>
+                        <div class="war-stat">
+                            <span class="war-label">EXECUTION RATE</span>
+                            <span class="war-value" id="war-execution-rate">0%</span>
+                        </div>
+                        <div class="war-stat">
+                            <span class="war-label">FAILURE COUNT</span>
+                            <span class="war-value" id="war-failures">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="war-room-analysis">
+                        <h4>TREND ANALYSIS</h4>
+                        <canvas id="trend-chart"></canvas>
+                    </div>
+                    
+                    <div class="war-room-reflection">
+                        <h4>WEEKLY REFLECTION (REQUIRED)</h4>
+                        <textarea id="weekly-reflection" placeholder="What worked? What failed? What must change next week?"></textarea>
+                    </div>
+                    
+                    <div class="war-room-actions">
+                        <button class="war-btn" id="save-reflection">SAVE & UNLOCK NEXT WEEK</button>
+                        <button class="war-btn secondary" id="export-weekly">EXPORT WEEKLY REPORT</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Failure Log Modal -->
+            <div class="modal" id="failure-modal">
+                <div class="modal-header">
+                    <h3>⚠️ LOG FAILURE</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="failure-task" id="failure-task-title">Task Title</div>
+                    
+                    <div class="failure-reasons">
+                        <label>Failure Reason (Required):</label>
+                        <select id="failure-reason">
+                            <option value="procrastination">Procrastination</option>
+                            <option value="distraction">Distraction</option>
+                            <option value="poor_planning">Poor Planning</option>
+                            <option value="overcommitment">Overcommitment</option>
+                            <option value="lack_focus">Lack of Focus</option>
+                            <option value="energy_low">Low Energy</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="failure-notes">
+                        <label>Notes (What will you do differently?):</label>
+                        <textarea id="failure-notes" placeholder="Be brutally honest..."></textarea>
+                    </div>
+                    
+                    <div class="failure-consequence">
+                        <div class="consequence-warning">
+                            ⚠️ PENALTY: <span id="penalty-points">-10</span> XP
+                        </div>
+                    </div>
+                    
+                    <button class="failure-btn" id="log-failure">ACCEPT PENALTY & LOG</button>
+                </div>
+            </div>
+
+            <!-- Emergency Task Modal -->
+            <div class="modal" id="emergency-modal">
+                <div class="modal-header">
+                    <h3>🚨 EMERGENCY TASK</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="emergency-info">
+                        Use only when absolutely necessary to save the day.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergency-title">Task Title</label>
+                        <input type="text" id="emergency-title" placeholder="What must be done?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergency-duration">Duration (minutes)</label>
+                        <input type="number" id="emergency-duration" min="5" max="120" value="30">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergency-priority">Priority Level</label>
+                        <select id="emergency-priority">
+                            <option value="critical">CRITICAL (Must do today)</option>
+                            <option value="high">HIGH (Important)</option>
+                            <option value="medium">MEDIUM (Should do)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="emergency-warning">
+                        ⚠️ Emergency tasks carry 50% penalty on failure.
+                    </div>
+                    
+                    <button class="emergency-btn" id="add-emergency-task">ADD EMERGENCY TASK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notifications-container" id="notifications"></div>
+
+        <!-- Audio Elements (Minimal) -->
+        <audio id="complete-sound" src="data:audio/mpeg;base64,//MUxAAAAANIAU0BQyAuLi4uLi4uLi4u"></audio>
+        <audio id="fail-sound" src="data:audio/mpeg;base64,//MUxAAAAANIAU0BQyAuLi4uLi4uLi4u"></audio>
+        <audio id="warning-sound" src="data:audio/mpeg;base64,//MUxAAAAANIAU0BQyAuLi4uLi4uLi4u"></audio>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
