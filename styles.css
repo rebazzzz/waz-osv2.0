@@ -701,7 +701,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    /* position: sticky; */
     bottom: 0;
     backdrop-filter: blur(10px);
 }
