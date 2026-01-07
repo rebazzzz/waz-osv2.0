@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark" data-discipline-state="active">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WAZ GO | EXECUTION SYSTEM</title>
     <meta name="description" content="Discipline enforcement system for relentless execution">
     <meta name="theme-color" content="#000000">
-    
+
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2300ff88%22>⚡</text></svg>">
-    
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300ff88'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.css">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.min.css">
+
     <style>
         /* Critical CSS for immediate rendering */
         :root {
@@ -31,13 +35,13 @@
             --text-secondary: #aaaaaa;
             --border-color: #333333;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
@@ -45,12 +49,13 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         .hidden {
             display: none !important;
         }
     </style>
 </head>
+
 <body>
     <!-- System Boot Screen -->
     <div id="boot-screen" class="boot-screen">
@@ -83,7 +88,7 @@
                 <span class="system-name">WAZ GO</span>
                 <span class="current-time" id="current-time">00:00</span>
             </div>
-            
+
             <div class="status-center">
                 <div class="discipline-level" id="discipline-level">
                     <span class="level-label">DISCIPLINE:</span>
@@ -94,18 +99,30 @@
                     <span class="streak-value">0</span>
                 </div>
             </div>
-            
+
             <div class="status-right">
                 <button class="system-btn" id="focus-mode-btn" title="Focus Mode (F)">
-                    <span>🎯</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M12 1v6m0 6v6m11-7h-6m-6 0H1m16.24-3.76l-4.24 4.24M7.76 16.24l-4.24 4.24m12.52 0l-4.24-4.24M7.76 7.76L3.52 3.52" />
+                        </svg></span>
                     <span>FOCUS</span>
                 </button>
                 <button class="system-btn" id="lockdown-btn" title="Lockdown Mode (L)">
-                    <span>🔒</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <circle cx="12" cy="16" r="1" />
+                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                        </svg></span>
                     <span>LOCKDOWN</span>
                 </button>
                 <button class="system-btn" id="settings-btn" title="Settings (S)">
-                    <span>⚙️</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
+                        </svg></span>
                 </button>
             </div>
         </div>
@@ -116,7 +133,9 @@
             <section class="execution-panel">
                 <div class="panel-header">
                     <h2 class="panel-title">
-                        <span class="icon">⚡</span>
+                        <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                            </svg></span>
                         EXECUTION ENGINE
                         <span class="day-tag" id="current-day">MONDAY</span>
                     </h2>
@@ -148,15 +167,22 @@
                 <!-- Task Controls -->
                 <div class="execution-controls">
                     <button class="execution-btn success" id="complete-task">
-                        <span>✓</span>
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                            </svg></span>
                         TASK COMPLETED
                     </button>
                     <button class="execution-btn warning" id="fail-task">
-                        <span>✗</span>
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                            </svg></span>
                         LOG FAILURE
                     </button>
                     <button class="execution-btn secondary" id="add-micro-task">
-                        <span>+</span>
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                            </svg></span>
                         EMERGENCY TASK
                     </button>
                 </div>
@@ -168,12 +194,15 @@
                 <section class="score-panel">
                     <div class="panel-header">
                         <h2 class="panel-title">
-                            <span class="icon">🏆</span>
+                            <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg></span>
                             EXECUTION SCORE
                         </h2>
                         <div class="score-display" id="total-score">0</div>
                     </div>
-                    
+
                     <div class="score-breakdown">
                         <div class="score-item">
                             <span class="score-label">DAILY</span>
@@ -209,11 +238,14 @@
                 <section class="honesty-panel">
                     <div class="panel-header">
                         <h2 class="panel-title">
-                            <span class="icon">⏱️</span>
+                            <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg></span>
                             TIME HONESTY
                         </h2>
                     </div>
-                    
+
                     <div class="honesty-metrics">
                         <div class="metric">
                             <span class="metric-label">PLANNED</span>
@@ -228,7 +260,7 @@
                             <span class="metric-value" id="time-delta">0h</span>
                         </div>
                     </div>
-                    
+
                     <div class="honesty-chart">
                         <canvas id="honesty-chart"></canvas>
                     </div>
@@ -238,11 +270,14 @@
                 <section class="psychology-panel">
                     <div class="panel-header">
                         <h2 class="panel-title">
-                            <span class="icon">🧠</span>
+                            <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C13.1 2 14 2.9 14 4V5H16V4C16 1.79 14.21 0 12 0S8 1.79 8 4V5H10V4C10 2.9 10.9 2 12 2ZM3 7V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V7H3ZM7 9H9V12H7V9ZM11 9H13V12H11V9ZM15 9H17V12H15V9Z" />
+                                </svg></span>
                             BRUTAL MIRROR
                         </h2>
                     </div>
-                    
+
                     <div class="mirror-messages">
                         <div class="message" id="mirror-message-1">
                             "What you do every day matters more than what you do once in a while."
@@ -255,7 +290,7 @@
                             <span id="executed-hours">0h</span>
                         </div>
                     </div>
-                    
+
                     <div class="burnout-indicator">
                         <span class="indicator-label">BURNOUT RISK</span>
                         <div class="indicator-bar">
@@ -286,14 +321,21 @@
                     <span class="stat-value" id="cognitive-load">LOW</span>
                 </div>
             </div>
-            
+
             <div class="footer-actions">
                 <button class="footer-btn" id="weekly-war-room-btn">
-                    <span>🛡️</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg></span>
                     WEEKLY WAR ROOM
                 </button>
                 <button class="footer-btn" id="export-data-btn">
-                    <span>💾</span>
+                    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z" />
+                            <path d="M8 15.01l1.41 1.41L11 14.84V18h2v-3.16l1.59 1.59L16 15.01 12.01 11z" />
+                        </svg></span>
                     EXPORT DATA
                 </button>
             </div>
@@ -318,12 +360,18 @@
         <div id="lockdown-overlay" class="lockdown-overlay hidden">
             <div class="lockdown-container">
                 <div class="lockdown-header">
-                    <h2>🔒 LOCKDOWN MODE ACTIVATED</h2>
+                    <h2><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <circle cx="12" cy="16" r="1" />
+                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                        </svg> LOCKDOWN MODE ACTIVATED</h2>
                 </div>
                 <div class="lockdown-task" id="lockdown-task">No task selected</div>
                 <div class="lockdown-timer" id="lockdown-timer">--:--:--</div>
                 <div class="lockdown-warning">
-                    ⚠️ ALL DISTRACTIONS BLOCKED • ESCAPE DISABLED FOR 25 MINUTES
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                    </svg> ALL DISTRACTIONS BLOCKED • ESCAPE DISABLED FOR 25 MINUTES
                 </div>
             </div>
         </div>
@@ -360,10 +408,16 @@
                     </div>
                     <div class="setting-group danger">
                         <button class="danger-btn" id="factory-reset">
-                            🚨 FACTORY RESET
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                            </svg> FACTORY RESET
                         </button>
                         <button class="danger-btn" id="clear-data">
-                            🗑️ CLEAR ALL DATA
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                            </svg> CLEAR ALL DATA
                         </button>
                     </div>
                 </div>
@@ -372,7 +426,10 @@
             <!-- Weekly War Room Modal -->
             <div class="modal wide-modal" id="war-room-modal">
                 <div class="modal-header">
-                    <h3>🛡️ WEEKLY WAR ROOM</h3>
+                    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg> WEEKLY WAR ROOM</h3>
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-content">
@@ -390,17 +447,18 @@
                             <span class="war-value" id="war-failures">0</span>
                         </div>
                     </div>
-                    
+
                     <div class="war-room-analysis">
                         <h4>TREND ANALYSIS</h4>
                         <canvas id="trend-chart"></canvas>
                     </div>
-                    
+
                     <div class="war-room-reflection">
                         <h4>WEEKLY REFLECTION (REQUIRED)</h4>
-                        <textarea id="weekly-reflection" placeholder="What worked? What failed? What must change next week?"></textarea>
+                        <textarea id="weekly-reflection"
+                            placeholder="What worked? What failed? What must change next week?"></textarea>
                     </div>
-                    
+
                     <div class="war-room-actions">
                         <button class="war-btn" id="save-reflection">SAVE & UNLOCK NEXT WEEK</button>
                         <button class="war-btn secondary" id="export-weekly">EXPORT WEEKLY REPORT</button>
@@ -411,12 +469,14 @@
             <!-- Failure Log Modal -->
             <div class="modal" id="failure-modal">
                 <div class="modal-header">
-                    <h3>⚠️ LOG FAILURE</h3>
+                    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                        </svg> LOG FAILURE</h3>
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-content">
                     <div class="failure-task" id="failure-task-title">Task Title</div>
-                    
+
                     <div class="failure-reasons">
                         <label>Failure Reason (Required):</label>
                         <select id="failure-reason">
@@ -429,18 +489,20 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-                    
+
                     <div class="failure-notes">
                         <label>Notes (What will you do differently?):</label>
                         <textarea id="failure-notes" placeholder="Be brutally honest..."></textarea>
                     </div>
-                    
+
                     <div class="failure-consequence">
                         <div class="consequence-warning">
-                            ⚠️ PENALTY: <span id="penalty-points">-10</span> XP
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                            </svg> PENALTY: <span id="penalty-points">-10</span> XP
                         </div>
                     </div>
-                    
+
                     <button class="failure-btn" id="log-failure">ACCEPT PENALTY & LOG</button>
                 </div>
             </div>
@@ -448,7 +510,10 @@
             <!-- Emergency Task Modal -->
             <div class="modal" id="emergency-modal">
                 <div class="modal-header">
-                    <h3>🚨 EMERGENCY TASK</h3>
+                    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                        </svg> EMERGENCY TASK</h3>
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-content">
@@ -476,7 +541,9 @@
                     </div>
 
                     <div class="emergency-warning">
-                        ⚠️ Emergency tasks carry 50% penalty on failure.
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                        </svg> Emergency tasks carry 50% penalty on failure.
                     </div>
 
                     <button class="emergency-btn" id="add-emergency-task">ADD EMERGENCY TASK</button>
@@ -507,6 +574,7 @@
         <audio id="warning-sound" src="data:audio/mpeg;base64,//MUxAAAAANIAU0BQyAuLi4uLi4uLi4u"></audio>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.min.js"></script>
 </body>
+
 </html>
