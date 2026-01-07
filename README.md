@@ -1,4 +1,4 @@
-# LIFE OS V2 - Personal Execution Operating System
+# WAZ GO - Personal Execution Operating System
 
 ## SYSTEM ARCHITECTURE
 
@@ -36,7 +36,7 @@ text
 ## DEPLOYMENT
 
 ### GitHub Pages (Easiest):
-1. Create repository: `life-os-v2`
+1. Create repository: `WAZGO-v2`
 2. Upload all files to repository
 3. Go to Settings → Pages → Source: Deploy from branch → main → / (root)
 4. Wait 1-2 minutes

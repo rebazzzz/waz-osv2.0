@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LIFE OS V2 | EXECUTION SYSTEM</title>
+    <title>WAZ GO | EXECUTION SYSTEM</title>
     <meta name="description" content="Discipline enforcement system for relentless execution">
     <meta name="theme-color" content="#000000">
     
@@ -56,7 +56,7 @@
     <div id="boot-screen" class="boot-screen">
         <div class="boot-terminal">
             <div class="terminal-header">
-                <div class="terminal-title">LIFE OS V2 - SYSTEM BOOT</div>
+                <div class="terminal-title">WAZ GO - SYSTEM BOOT</div>
                 <div class="terminal-controls">
                     <span class="control red"></span>
                     <span class="control yellow"></span>
@@ -80,7 +80,7 @@
         <div class="system-status-bar">
             <div class="status-left">
                 <span class="system-indicator active"></span>
-                <span class="system-name">LIFE OS V2</span>
+                <span class="system-name">WAZ GO</span>
                 <span class="current-time" id="current-time">00:00</span>
             </div>
             
@@ -455,17 +455,17 @@
                     <div class="emergency-info">
                         Use only when absolutely necessary to save the day.
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="emergency-title">Task Title</label>
                         <input type="text" id="emergency-title" placeholder="What must be done?">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="emergency-duration">Duration (minutes)</label>
                         <input type="number" id="emergency-duration" min="5" max="120" value="30">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="emergency-priority">Priority Level</label>
                         <select id="emergency-priority">
@@ -474,12 +474,26 @@
                             <option value="medium">MEDIUM (Should do)</option>
                         </select>
                     </div>
-                    
+
                     <div class="emergency-warning">
                         ⚠️ Emergency tasks carry 50% penalty on failure.
                     </div>
-                    
+
                     <button class="emergency-btn" id="add-emergency-task">ADD EMERGENCY TASK</button>
+                </div>
+            </div>
+
+            <!-- Message Modal -->
+            <div class="modal" id="message-modal">
+                <div class="modal-header">
+                    <h3 id="message-title">SYSTEM MESSAGE</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="message-content" id="message-content">
+                        Message text here
+                    </div>
+                    <button class="message-btn" id="message-close-btn">OK</button>
                 </div>
             </div>
         </div>

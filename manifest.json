@@ -1,6 +1,6 @@
 {
-  "name": "LIFE OS V2",
-  "short_name": "LIFEOS2",
+  "name": "WAZ GO",
+  "short_name": "WAZGO",
   "description": "Personal execution operating system for discipline enforcement",
   "start_url": "./index.html",
   "display": "standalone",

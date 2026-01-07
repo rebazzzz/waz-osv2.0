@@ -365,6 +365,12 @@ class LifeOSV2 {
 
     // Psychological Messages
     this.messages = {
+      active: [
+        "Execution builds identity. Keep going.",
+        "Consistency compounds. You're building something real.",
+        "Discipline equals freedom. This is how you earn it.",
+        "What you do every day matters more than what you do once in a while.",
+      ],
       success: [
         "Execution builds identity. Keep going.",
         "Consistency compounds. You're building something real.",
@@ -437,6 +443,7 @@ class LifeOSV2 {
       dailyScore: get("daily-score"),
       weeklyScore: get("weekly-score"),
       monthlyScore: get("monthly-score"),
+      dailyProgress: get("daily-progress"),
       disciplineState: get("discipline-state"),
 
       // Time honesty
@@ -627,7 +634,8 @@ class LifeOSV2 {
 
       if (!isCompleted && !isFailed && timeLeft < 0) {
         this.elements.currentTaskStatus.textContent = "OVERDUE";
-        this.elements.currentTaskStatus.style.color = "var(--danger-color)";
+        if (this.elements.currentTaskStatus)
+          this.elements.currentTaskStatus.style.color = "var(--danger-color)";
 
         // Auto-fail if brutal mode enabled
         if (this.state.settings.brutalMode && timeLeft < -5) {
@@ -635,13 +643,16 @@ class LifeOSV2 {
         }
       } else if (isCompleted) {
         this.elements.currentTaskStatus.textContent = "COMPLETED";
-        this.elements.currentTaskStatus.style.color = "var(--primary-color)";
+        if (this.elements.currentTaskStatus)
+          this.elements.currentTaskStatus.style.color = "var(--primary-color)";
       } else if (isFailed) {
         this.elements.currentTaskStatus.textContent = "FAILED";
-        this.elements.currentTaskStatus.style.color = "var(--danger-color)";
+        if (this.elements.currentTaskStatus)
+          this.elements.currentTaskStatus.style.color = "var(--danger-color)";
       } else {
         this.elements.currentTaskStatus.textContent = "IN PROGRESS";
-        this.elements.currentTaskStatus.style.color = "var(--primary-color)";
+        if (this.elements.currentTaskStatus)
+          this.elements.currentTaskStatus.style.color = "var(--primary-color)";
       }
 
       // Update focus/lockdown overlays
@@ -744,6 +755,9 @@ class LifeOSV2 {
   updateScores() {
     const dateKey = this.getDateKey(this.state.selectedDate);
     const dayOfWeek = this.state.selectedDate.getDay();
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const isToday = this.isSameDay(this.state.selectedDate, now);
 
     // Calculate daily score
     let dailyScore = 0;
@@ -765,6 +779,27 @@ class LifeOSV2 {
         // Penalty for failure
         const penalty = Math.round(possible * 0.5); // 50% penalty
         dailyScore -= penalty;
+      } else if (isToday) {
+        // Check if task is in progress
+        const start = this.timeToMinutes(task.start);
+        const end = this.timeToMinutes(task.end);
+
+        if (currentMinutes >= start && currentMinutes <= end) {
+          // Task is in progress - add partial score
+          const progress = Math.min(
+            (currentMinutes - start) / (end - start),
+            1.0
+          );
+          const streakBonus = this.state.scores.streak * 0.01;
+          const multiplier = this.state.scores.multiplier;
+          const earned = Math.round(
+            possible * progress * (1 + streakBonus) * multiplier
+          );
+          dailyScore += earned;
+        } else if (currentMinutes > end) {
+          // Task is overdue but not completed/failed - no points
+          dailyScore += 0;
+        }
       }
     });
 
@@ -827,7 +862,11 @@ class LifeOSV2 {
     // Update progress bars
     const dailyPercent =
       dailyPossible > 0 ? (dailyScore / dailyPossible) * 100 : 0;
-    this.elements.dailyProgress.style.width = `${Math.min(dailyPercent, 100)}%`;
+    if (this.elements.dailyProgress)
+      this.elements.dailyProgress.style.width = `${Math.min(
+        dailyPercent,
+        100
+      )}%`;
 
     // Update today's execution percentage
     this.elements.todayExecution.textContent = `${Math.round(dailyPercent)}%`;
@@ -887,8 +926,9 @@ class LifeOSV2 {
     this.elements.timeDelta.textContent = `${delta >= 0 ? "+" : ""}${(
       delta / 60
     ).toFixed(1)}h`;
-    this.elements.timeDelta.style.color =
-      delta >= 0 ? "var(--primary-color)" : "var(--danger-color)";
+    if (this.elements.timeDelta)
+      this.elements.timeDelta.style.color =
+        delta >= 0 ? "var(--primary-color)" : "var(--danger-color)";
 
     this.elements.promisedHours.textContent = `${plannedHours}h`;
     this.elements.executedHours.textContent = `${actualHours}h`;
@@ -1035,14 +1075,15 @@ class LifeOSV2 {
 
     this.state.analytics.cognitiveLoad = loadLevel;
     this.elements.cognitiveLoad.textContent = loadLevel;
-    this.elements.cognitiveLoad.style.color =
-      loadLevel === "LOW"
-        ? "var(--primary-color)"
-        : loadLevel === "MEDIUM"
-        ? "var(--warning-color)"
-        : loadLevel === "HIGH"
-        ? "var(--warning-color)"
-        : "var(--danger-color)";
+    if (this.elements.cognitiveLoad)
+      this.elements.cognitiveLoad.style.color =
+        loadLevel === "LOW"
+          ? "var(--primary-color)"
+          : loadLevel === "MEDIUM"
+          ? "var(--warning-color)"
+          : loadLevel === "HIGH"
+          ? "var(--warning-color)"
+          : "var(--danger-color)";
 
     // Update burnout risk
     this.updateBurnoutRisk(loadScore, taskCount);
@@ -1063,16 +1104,18 @@ class LifeOSV2 {
     risk = Math.min(risk, 100);
 
     this.state.analytics.burnoutRisk = risk;
-    this.elements.burnoutRisk.style.width = `${risk}%`;
-    this.elements.burnoutRisk.textContent = `${Math.round(risk)}%`;
+    if (this.elements.burnoutRisk) {
+      this.elements.burnoutRisk.style.width = `${risk}%`;
+      this.elements.burnoutRisk.textContent = `${Math.round(risk)}%`;
 
-    // Color coding
-    if (risk < 30) {
-      this.elements.burnoutRisk.style.background = "var(--primary-color)";
-    } else if (risk < 70) {
-      this.elements.burnoutRisk.style.background = "var(--warning-color)";
-    } else {
-      this.elements.burnoutRisk.style.background = "var(--danger-gradient)";
+      // Color coding
+      if (risk < 30) {
+        this.elements.burnoutRisk.style.background = "var(--primary-color)";
+      } else if (risk < 70) {
+        this.elements.burnoutRisk.style.background = "var(--warning-color)";
+      } else {
+        this.elements.burnoutRisk.style.background = "var(--danger-gradient)";
+      }
     }
   }
 
@@ -1080,7 +1123,7 @@ class LifeOSV2 {
 
   updatePsychology() {
     const state = this.state.disciplineState;
-    const messages = this.messages[state];
+    const messages = this.messages[state] || this.messages.active;
 
     // Random message
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
@@ -1282,28 +1325,30 @@ class LifeOSV2 {
   }
 
   enterLockdownMode() {
-    if (
-      !confirm(
-        "Lockdown mode blocks all distractions for 25 minutes. Continue?"
-      )
-    ) {
-      return;
-    }
+    this.showMessageModal(
+      "Lockdown mode blocks all distractions for 25 minutes. Continue?",
+      "LOCKDOWN MODE",
+      () => {
+        // onConfirm
+        this.state.systemMode = "lockdown";
+        this.elements.lockdownOverlay.classList.remove("hidden");
 
-    this.state.systemMode = "lockdown";
-    this.elements.lockdownOverlay.classList.remove("hidden");
+        // Update lockdown display
+        const now = new Date();
+        const tasks = this.scheduleTemplate[now.getDay()];
+        const currentTask = this.findCurrentTask(tasks, now);
 
-    // Update lockdown display
-    const now = new Date();
-    const tasks = this.scheduleTemplate[now.getDay()];
-    const currentTask = this.findCurrentTask(tasks, now);
+        if (currentTask) {
+          this.elements.lockdownTask.textContent = currentTask.title;
+        }
 
-    if (currentTask) {
-      this.elements.lockdownTask.textContent = currentTask.title;
-    }
-
-    // Start lockdown timer (25 minutes)
-    this.startLockdownTimer(25);
+        // Start lockdown timer (25 minutes)
+        this.startLockdownTimer(25);
+      },
+      () => {
+        // onCancel - do nothing
+      }
+    );
   }
 
   exitFocusMode() {
@@ -1821,6 +1866,60 @@ class LifeOSV2 {
       notification.style.animation = "slideOut 0.3s ease";
       setTimeout(() => notification.remove(), 300);
     }, 5000);
+  }
+
+  showMessageModal(
+    message,
+    title = "SYSTEM MESSAGE",
+    onConfirm = null,
+    onCancel = null
+  ) {
+    const modal = document.getElementById("message-modal");
+    const titleEl = document.getElementById("message-title");
+    const contentEl = document.getElementById("message-content");
+    const closeBtn = document.getElementById("message-close-btn");
+
+    titleEl.textContent = title;
+    contentEl.textContent = message;
+
+    // Show modal
+    document.getElementById("modal-overlay").classList.remove("hidden");
+    modal.classList.remove("hidden");
+
+    // Handle close button
+    const closeModal = () => {
+      document.getElementById("modal-overlay").classList.add("hidden");
+      modal.classList.add("hidden");
+      if (onCancel) onCancel();
+    };
+
+    // Handle confirm button
+    const handleConfirm = () => {
+      closeModal();
+      if (onConfirm) onConfirm();
+    };
+
+    // Handle cancel/close
+    const handleCancel = () => {
+      closeModal();
+      if (onCancel) onCancel();
+    };
+
+    // Add event listeners
+    closeBtn.addEventListener("click", handleConfirm);
+    document.querySelectorAll(".modal-close").forEach((btn) => {
+      btn.addEventListener("click", handleCancel);
+    });
+
+    // Handle overlay click
+    document.getElementById("modal-overlay").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("modal-overlay")) {
+        handleCancel();
+      }
+    });
+
+    // Focus the confirm button
+    closeBtn.focus();
   }
 
   playSound(type) {

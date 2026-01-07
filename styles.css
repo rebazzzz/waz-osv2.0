@@ -1152,6 +1152,35 @@ body {
     letter-spacing: 1px;
 }
 
+/* Message Modal */
+.message-content {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.message-btn {
+    width: 100%;
+    background: var(--primary-color);
+    color: var(--bg-primary);
+    border: none;
+    padding: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.message-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
 /* ===== NOTIFICATIONS ===== */
 .notifications-container {
     position: fixed;
