@@ -48,6 +48,11 @@ export function showMessageModal(
   titleEl.textContent = title;
   contentEl.textContent = message;
 
+  // Hide all modals first
+  document.querySelectorAll(".modal").forEach((modal) => {
+    modal.classList.add("hidden");
+  });
+
   // Show modal
   document.getElementById("modal-overlay").classList.remove("hidden");
   modal.classList.remove("hidden");
