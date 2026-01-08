@@ -1,0 +1,1 @@
+find . -type f -name "*.js" ! -name "*.min.js" -exec sh -c 'terser "$1" -o "${1%.js}.min.js" -c -m --source-map "url=\"${1%.js}.min.js.map\" filename=\"${1%.js}.min.js\""' _ {} \;
