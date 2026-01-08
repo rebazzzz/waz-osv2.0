@@ -1734,7 +1734,7 @@ class LifeOSV2 {
       this.updateExecutionEngine();
 
       this.showNotification(
-        "LIFE OS V2 initialized. Ready for execution.",
+        "WAZ GO initialized. Ready for execution.",
         "success"
       );
     }, 3000);

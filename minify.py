@@ -53,31 +53,31 @@ def main():
         f.write(js_min)
 
     # Minify backup CSS
-    with open('backup.css', 'r', encoding='utf-8') as f:
-        backup_css = f.read()
-    backup_css_min = minify_css(backup_css)
+    # with open('backup.css', 'r', encoding='utf-8') as f:
+    #     backup_css = f.read()
+    # backup_css_min = minify_css(backup_css)
 
-    with open('backup.min.css', 'w', encoding='utf-8') as f:
-        f.write(backup_css_min)
+    # with open('backup.min.css', 'w', encoding='utf-8') as f:
+    #     f.write(backup_css_min)
 
     # Minify backup JS
-    with open('backup.js', 'r', encoding='utf-8') as f:
-        backup_js = f.read()
-    backup_js_min = minify_js(backup_js)
+    # with open('backup.js', 'r', encoding='utf-8') as f:
+    #     backup_js = f.read()
+    # backup_js_min = minify_js(backup_js)
 
-    with open('backup.min.js', 'w', encoding='utf-8') as f:
-        f.write(backup_js_min)
+    # with open('backup.min.js', 'w', encoding='utf-8') as f:
+    #     f.write(backup_js_min)
 
     print("✅ Minification complete!")
     print(f"📊 CSS: {len(css):,}B → {len(css_min):,}B ({len(css_min)/len(css)*100:.1f}%)")
     print(f"📊 JS: {len(js):,}B → {len(js_min):,}B ({len(js_min)/len(js)*100:.1f}%)")
-    print(f"📊 Backup CSS: {len(backup_css):,}B → {len(backup_css_min):,}B ({len(backup_css_min)/len(backup_css)*100:.1f}%)")
-    print(f"📊 Backup JS: {len(backup_js):,}B → {len(backup_js_min):,}B ({len(backup_js_min)/len(backup_js)*100:.1f}%)")
+    # print(f"📊 Backup CSS: {len(backup_css):,}B → {len(backup_css_min):,}B ({len(backup_css_min)/len(backup_css)*100:.1f}%)")
+    # print(f"📊 Backup JS: {len(backup_js):,}B → {len(backup_js_min):,}B ({len(backup_js_min)/len(backup_js)*100:.1f}%)")
     print("\n🚀 Files created:")
     print("  - styles.min.css")
     print("  - app.min.js")
-    print("  - backup.min.css")
-    print("  - backup.min.js")
+    # print("  - backup.min.css")
+    # print("  - backup.min.js")
 
 if __name__ == '__main__':
     main()
