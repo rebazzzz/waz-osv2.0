@@ -60,6 +60,29 @@ class LifeOSV2 {
     // Schedule Template (Hardcoded - Non-negotiable)
     this.scheduleTemplate = {
       0: [
+        // Sunday
+        {
+          id: "sun_1",
+          start: "10:00",
+          end: "13:00",
+          title: "Weekly War Room",
+          category: "planning",
+          baseXP: 40,
+          difficulty: 1.5,
+          required: true,
+        },
+        {
+          id: "sun_2",
+          start: "14:00",
+          end: "16:00",
+          title: "Optional Business or Software Dev",
+          category: "optional",
+          baseXP: 25,
+          difficulty: 1.3,
+          optional: true,
+        },
+      ],
+      1: [
         // Monday
         {
           id: "mon_1",
@@ -107,7 +130,7 @@ class LifeOSV2 {
           difficulty: 1.3,
         },
       ],
-      1: [
+      2: [
         // Tuesday
         {
           id: "tue_1",
@@ -155,7 +178,7 @@ class LifeOSV2 {
           difficulty: 1.3,
         },
       ],
-      2: [
+      3: [
         // Wednesday
         {
           id: "wed_1",
@@ -203,7 +226,7 @@ class LifeOSV2 {
           difficulty: 1.3,
         },
       ],
-      3: [
+      4: [
         // Thursday
         {
           id: "thu_1",
@@ -251,7 +274,7 @@ class LifeOSV2 {
           difficulty: 1.3,
         },
       ],
-      4: [
+      5: [
         // Friday
         {
           id: "fri_1",
@@ -299,7 +322,7 @@ class LifeOSV2 {
           difficulty: 1.5,
         },
       ],
-      5: [
+      6: [
         // Saturday
         {
           id: "sat_1",
@@ -336,29 +359,6 @@ class LifeOSV2 {
           category: "work",
           baseXP: 15,
           difficulty: 1.0,
-        },
-      ],
-      6: [
-        // Sunday
-        {
-          id: "sun_1",
-          start: "10:00",
-          end: "13:00",
-          title: "Weekly War Room",
-          category: "planning",
-          baseXP: 40,
-          difficulty: 1.5,
-          required: true,
-        },
-        {
-          id: "sun_2",
-          start: "14:00",
-          end: "16:00",
-          title: "Optional Business or Software Dev",
-          category: "optional",
-          baseXP: 25,
-          difficulty: 1.3,
-          optional: true,
         },
       ],
     };
@@ -508,7 +508,7 @@ class LifeOSV2 {
           ...this.state,
           ...parsed,
           currentDate: new Date(),
-          selectedDate: new Date(parsed.selectedDate || new Date()),
+          selectedDate: new Date(), // Always start with today
         };
       }
 
