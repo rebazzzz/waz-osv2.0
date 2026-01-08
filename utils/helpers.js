@@ -1,0 +1,34 @@
+// Utility Functions
+
+export function timeToMinutes(timeStr) {
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+export function formatTime(date) {
+  return `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+export function getDateKey(date) {
+  return date.toISOString().split("T")[0];
+}
+
+export function getWeekKey(date) {
+  const firstDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() - date.getDay()
+  );
+  return firstDay.toISOString().split("T")[0];
+}
+
+export function isSameDay(date1, date2) {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() === date2.getFullYear()
+  );
+}
