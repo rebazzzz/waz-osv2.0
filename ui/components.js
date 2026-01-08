@@ -35,6 +35,7 @@ export function setupDOM() {
     currentDay: get("current-day"),
     countdownTimer: get("countdown-timer"),
     currentTaskCard: get("current-task-card"),
+    currentTaskContainer: get("current-task-container"),
     currentTaskTime: get("current-task-time"),
     currentTaskTitle: get("current-task-title"),
     currentTaskStatus: get("current-task-status"),

@@ -80,7 +80,10 @@ export function updateCurrentTask(tasks, now) {
     if (!isCompleted && !isFailed && timeLeft < 0) {
       this.elements.currentTaskStatus.textContent = "OVERDUE";
       if (this.elements.currentTaskStatus)
-        this.elements.currentTaskStatus.style.color = "var(--danger-color)";
+        this.elements.currentTaskStatus.style.color = "var(--warning-color)";
+      if (this.elements.currentTaskContainer)
+        this.elements.currentTaskContainer.style.background =
+          "linear-gradient(135deg, var(--warning-color) 0%, rgba(255, 170, 0, 0.1) 100%)";
 
       // Auto-fail overdue tasks
       this.autoFailTask(currentTask);
@@ -88,14 +91,23 @@ export function updateCurrentTask(tasks, now) {
       this.elements.currentTaskStatus.textContent = "COMPLETED";
       if (this.elements.currentTaskStatus)
         this.elements.currentTaskStatus.style.color = "var(--primary-color)";
+      if (this.elements.currentTaskContainer)
+        this.elements.currentTaskContainer.style.background =
+          "linear-gradient(135deg, var(--primary-color) 0%, rgba(40, 167, 69, 0.1) 100%)";
     } else if (isFailed) {
       this.elements.currentTaskStatus.textContent = "FAILED";
       if (this.elements.currentTaskStatus)
         this.elements.currentTaskStatus.style.color = "var(--danger-color)";
+      if (this.elements.currentTaskContainer)
+        this.elements.currentTaskContainer.style.background =
+          "linear-gradient(135deg, var(--danger-color) 0%, rgba(220, 53, 69, 0.1) 100%)";
     } else {
       this.elements.currentTaskStatus.textContent = "IN PROGRESS";
       if (this.elements.currentTaskStatus)
         this.elements.currentTaskStatus.style.color = "var(--primary-color)";
+      if (this.elements.currentTaskContainer)
+        this.elements.currentTaskContainer.style.background =
+          "linear-gradient(135deg, var(--primary-color) 0%, rgba(40, 167, 69, 0.1) 100%)";
     }
 
     // Update focus/lockdown overlays
@@ -112,12 +124,17 @@ export function updateCurrentTask(tasks, now) {
     this.elements.countdownTimer.textContent = "--:--:--";
     this.elements.currentTaskStatus.textContent = "UP NEXT";
     this.elements.currentTaskStatus.style.color = "var(--text-secondary)";
+    if (this.elements.currentTaskContainer)
+      this.elements.currentTaskContainer.style.background =
+        "linear-gradient(135deg, var(--primary-color) 0%, rgba(40, 167, 69, 0.1) 100%)";
   } else {
     this.elements.currentTaskTime.textContent = "--:-- - --:--";
     this.elements.currentTaskTitle.textContent = "No active task";
     this.elements.countdownTimer.textContent = "--:--:--";
     this.elements.currentTaskStatus.textContent = "AWAITING EXECUTION";
     this.elements.currentTaskStatus.style.color = "var(--text-secondary)";
+    if (this.elements.currentTaskContainer)
+      this.elements.currentTaskContainer.style.background = "";
   }
 }
 
@@ -168,21 +185,33 @@ export function renderSchedule(tasks, now) {
     if (isFailed) classes.push("failed");
     if (isMissed) classes.push("missed");
 
-    // Determine status text
+    // Determine status text and colors
     let statusText = "";
-    if (isCompleted) statusText = "COMPLETED";
-    else if (isFailed) statusText = "FAILED";
+    let xpColor = "var(--primary-color)";
+    let progressColor = "var(--primary-color)";
+
+    if (isCompleted) {
+      statusText = "COMPLETED";
+    } else if (isFailed) {
+      statusText = "FAILED";
+      xpColor = "var(--danger-color)";
+      progressColor = "var(--danger-color)";
+    } else if (isMissed) {
+      statusText = "OVERDUE";
+      xpColor = "var(--warning-color)";
+      progressColor = "var(--warning-color)";
+    }
 
     html += `
               <div class="${classes.join(" ")}" data-task-id="${task.id}">
                   <div class="item-header">
                       <div class="item-time">${task.start} - ${task.end}</div>
-                      <div class="item-xp">${totalXP} XP</div>
+                      <div class="item-xp" style="color: ${xpColor}">${totalXP} XP</div>
                   </div>
                   <div class="item-title">${task.title}</div>
                   <div class="item-status">${statusText}</div>
                   <div class="item-progress">
-                      <div class="progress-fill" style="width: ${progress}%"></div>
+                      <div class="progress-fill" style="width: ${progress}% ; background: ${progressColor}"></div>
                   </div>
               </div>
           `;

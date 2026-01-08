@@ -1,6 +1,6 @@
 // Scoring Engine
 
-import { timeToMinutes, getDateKey, isSameDay } from '../utils/helpers.js';
+import { timeToMinutes, getDateKey, isSameDay } from "../utils/helpers.js";
 
 export function updateScores() {
   const dateKey = getDateKey(this.state.selectedDate);
@@ -47,8 +47,9 @@ export function updateScores() {
         );
         dailyScore += earned;
       } else if (currentMinutes > end) {
-        // Task is overdue but not completed/failed - no points
-        dailyScore += 0;
+        // Task is overdue - treat as failed with penalty
+        const penalty = Math.round(possible * 0.5); // 50% penalty
+        dailyScore -= penalty;
       }
     }
   });
@@ -79,10 +80,7 @@ export function updateScores() {
 
   if (dailyScore >= dailyPossible * 0.8) {
     // 80% completion maintains streak
-    if (
-      this.state.scores.dailyHistory?.[yesterdayKey] >=
-      dailyPossible * 0.8
-    ) {
+    if (this.state.scores.dailyHistory?.[yesterdayKey] >= dailyPossible * 0.8) {
       streak++;
     } else {
       streak = 1;
@@ -113,10 +111,7 @@ export function updateScores() {
   const dailyPercent =
     dailyPossible > 0 ? (dailyScore / dailyPossible) * 100 : 0;
   if (this.elements.dailyProgress)
-    this.elements.dailyProgress.style.width = `${Math.min(
-      dailyPercent,
-      100
-    )}%`;
+    this.elements.dailyProgress.style.width = `${Math.min(dailyPercent, 100)}%`;
 
   // Update today's execution percentage
   this.elements.todayExecution.textContent = `${Math.round(dailyPercent)}%`;
