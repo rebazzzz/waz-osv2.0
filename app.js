@@ -36,6 +36,9 @@ import {
   startFocusTimer,
   startLockdownTimer,
   exitLockdownMode,
+  enterSleepMode,
+  startSleepTimer,
+  exitSleepMode,
 } from "./engine/modes.js";
 import {
   setupEventListeners,
@@ -65,6 +68,7 @@ class LifeOSV2 {
       countdown: null,
       focus: null,
       lockdown: null,
+      sleep: null,
     };
 
     // Initialize
@@ -379,6 +383,19 @@ class LifeOSV2 {
     return exitLockdownMode.call(this);
   }
 
+  // ===== SLEEP MODE =====
+  enterSleepMode() {
+    return enterSleepMode.call(this);
+  }
+
+  startSleepTimer() {
+    return startSleepTimer.call(this);
+  }
+
+  exitSleepMode() {
+    return exitSleepMode.call(this);
+  }
+
   // ===== WEEKLY WAR ROOM =====
 
   openWarRoom() {
@@ -682,5 +699,7 @@ class LifeOSV2 {
   }
 }
 
-// Initialize system
-window.lifeOS = new LifeOSV2();
+// Initialize system when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  window.lifeOS = new LifeOSV2();
+});

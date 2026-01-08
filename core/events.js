@@ -164,10 +164,29 @@ export function handleKeyboardShortcuts(e) {
 
 export function updateTime() {
   const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
   this.elements.currentTime.textContent = `${now
     .getHours()
     .toString()
     .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
+  console.log(`updateTime called: ${currentHour}:${currentMinute}, mode: ${this.state.systemMode}`);
+
+  // Auto-sleep mode between 23:00-05:00
+  if (currentHour >= 23 || currentHour < 5) {
+    console.log(`Sleep condition met (hour ${currentHour}), current mode: ${this.state.systemMode}`);
+    if (this.state.systemMode !== "sleep") {
+      console.log("Calling enterSleepMode()");
+      this.enterSleepMode();
+    }
+  } else {
+    console.log(`Sleep condition not met (hour ${currentHour}), current mode: ${this.state.systemMode}`);
+    if (this.state.systemMode === "sleep") {
+      console.log("Calling exitSleepMode()");
+      this.exitSleepMode();
+    }
+  }
 
   // Update day name based on selected date
   const days = [

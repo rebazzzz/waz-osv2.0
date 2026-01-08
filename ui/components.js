@@ -84,16 +84,19 @@ export function setupDOM() {
     // Overlays
     focusOverlay: get("focus-overlay"),
     lockdownOverlay: get("lockdown-overlay"),
+    sleepOverlay: get("sleep-overlay"),
     focusTask: get("focus-task"),
     focusTimer: get("focus-timer"),
     lockdownTask: get("lockdown-task"),
     lockdownTimer: get("lockdown-timer"),
+    sleepTimer: get("sleep-timer"),
     exitFocus: get("exit-focus"),
 
     // Modals
     modalOverlay: get("modal-overlay"),
     settingsModal: get("settings-modal"),
     warRoomModal: get("war-room-modal"),
+ 
     failureModal: get("failure-modal"),
     emergencyModal: get("emergency-modal"),
     failureTaskTitle: get("failure-task-title"),

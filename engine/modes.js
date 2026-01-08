@@ -110,3 +110,64 @@ export function exitLockdownMode() {
     clearInterval(this.timers.lockdown);
   }
 }
+
+export function enterSleepMode() {
+  this.state.systemMode = "sleep";
+  this.elements.sleepOverlay.classList.remove("hidden");
+
+  // Start sleep timer (from 23:00 to 05:00)
+  this.startSleepTimer();
+}
+
+export function startSleepTimer() {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
+  // Calculate seconds until 05:00
+  let targetHour = 5; // 05:00
+  let secondsUntilTarget;
+
+  if (currentHour < 5 || (currentHour === 5 && currentMinute === 0)) {
+    // Before 05:00, count down to 05:00
+    secondsUntilTarget =
+      targetHour * 3600 -
+      (currentHour * 3600 + currentMinute * 60 + now.getSeconds());
+  } else {
+    // After 05:00, count down to 05:00 next day
+    secondsUntilTarget =
+      24 * 3600 -
+      (currentHour * 3600 + currentMinute * 60 + now.getSeconds()) +
+      targetHour * 3600;
+  }
+
+  this.timers.sleep = setInterval(() => {
+    secondsUntilTarget--;
+
+    if (secondsUntilTarget <= 0) {
+      clearInterval(this.timers.sleep);
+      this.exitSleepMode();
+      return;
+    }
+
+    const hours = Math.floor(secondsUntilTarget / 3600);
+    const minutes = Math.floor((secondsUntilTarget % 3600) / 60);
+    const seconds = secondsUntilTarget % 60;
+
+    this.elements.sleepTimer.textContent = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }, 1000);
+}
+
+export function exitSleepMode() {
+  this.state.systemMode = "normal";
+  this.elements.sleepOverlay.classList.add("hidden");
+
+  // Stop timers
+  if (this.timers.sleep) {
+    clearInterval(this.timers.sleep);
+  }
+}
