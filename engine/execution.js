@@ -1,6 +1,6 @@
 // Execution Engine
 
-import { timeToMinutes, getDateKey, isSameDay } from '../utils/helpers.js';
+import { timeToMinutes, getDateKey, isSameDay } from "../utils/helpers.js";
 
 export function updateExecutionEngine() {
   const now = new Date();
@@ -8,7 +8,9 @@ export function updateExecutionEngine() {
   const dateKey = getDateKey(this.state.selectedDate);
 
   // Get today's schedule
-  let tasks = [...this.scheduleTemplate[dayOfWeek]];
+  let tasks = [
+    ...this.scheduleEngine.getScheduleForDate(this.state.selectedDate),
+  ];
 
   // Add emergency tasks for this date
   if (this.state.emergencyTasks[dateKey]) {
@@ -16,9 +18,7 @@ export function updateExecutionEngine() {
   }
 
   // Sort by start time
-  tasks.sort(
-    (a, b) => timeToMinutes(a.start) - timeToMinutes(b.start)
-  );
+  tasks.sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
 
   // Update current task
   this.updateCurrentTask(tasks, now);

@@ -1,6 +1,6 @@
 // Focus & Lockdown Modes
 
-import { formatTime } from '../utils/helpers.js';
+import { formatTime } from "../utils/helpers.js";
 
 export function enterFocusMode() {
   this.state.systemMode = "focus";
@@ -8,7 +8,7 @@ export function enterFocusMode() {
 
   // Update focus display
   const now = new Date();
-  const tasks = this.scheduleTemplate[now.getDay()];
+  const tasks = this.scheduleEngine.getScheduleForDate(now);
   const currentTask = this.findCurrentTask(tasks, now);
 
   if (currentTask) {

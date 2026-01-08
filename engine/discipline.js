@@ -1,10 +1,10 @@
 // Discipline System
 
-import { getDateKey } from '../utils/helpers.js';
+import { getDateKey } from "../utils/helpers.js";
 
 export function updateDisciplineState() {
   const dateKey = getDateKey(this.state.selectedDate);
-  const tasks = this.scheduleTemplate[this.state.selectedDate.getDay()];
+  const tasks = this.scheduleEngine.getScheduleForDate(this.state.selectedDate);
   let completedCount = 0;
   let totalCount = 0;
 
@@ -85,7 +85,7 @@ export function calculateConsistencyRate() {
 
       // Determine if day was consistent (score > 70% of possible)
       const dayOfWeek = date.getDay();
-      const tasks = this.scheduleTemplate[dayOfWeek];
+      const tasks = this.scheduleEngine.getScheduleForDate(date);
       let possible = 0;
       tasks.forEach((task) => {
         if (!task.optional) {
@@ -106,7 +106,7 @@ export function calculateConsistencyRate() {
 
 export function updateCognitiveLoad() {
   const dateKey = getDateKey(this.state.selectedDate);
-  const tasks = this.scheduleTemplate[this.state.selectedDate.getDay()];
+  const tasks = this.scheduleEngine.getScheduleForDate(this.state.selectedDate);
 
   let loadScore = 0;
   let taskCount = 0;

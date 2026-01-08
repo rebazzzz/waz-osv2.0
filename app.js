@@ -1,63 +1,57 @@
 // LIFE OS V2 - Personal Execution Operating System
 // Core Engine
 
-import { scheduleTemplate } from './core/schedule.js';
-import { messages, defaultState } from './core/state.js';
-import { 
-  timeToMinutes, 
-  formatTime, 
-  getDateKey, 
-  getWeekKey, 
-  isSameDay 
-} from './utils/helpers.js';
-import { 
-  updateExecutionEngine, 
-  updateCurrentTask, 
-  renderSchedule 
-} from './engine/execution.js';
-import { 
-  updateScores, 
-  updateTimeHonesty 
-} from './engine/scoring.js';
-import { 
-  updateDisciplineState, 
-  calculateConsistencyRate, 
-  updateCognitiveLoad, 
-  updateBurnoutRisk 
-} from './engine/discipline.js';
-import { 
-  updatePsychology, 
-  setupDOM 
-} from './ui/components.js';
-import { 
-  openModal, 
-  closeModal, 
-  showNotification, 
-  showMessageModal 
-} from './ui/modals.js';
-import { 
-  enterFocusMode, 
-  enterLockdownMode, 
-  exitFocusMode, 
-  startFocusTimer, 
-  startLockdownTimer, 
-  exitLockdownMode 
-} from './engine/modes.js';
-import { 
-  setupEventListeners, 
-  handleKeyboardShortcuts, 
-  updateTime, 
-  checkDailyReset, 
-  performDailyReset 
-} from './core/events.js';
+import { scheduleEngine } from "./core/scheduleEngine.js";
+import { messages, defaultState } from "./core/state.js";
+import {
+  timeToMinutes,
+  formatTime,
+  getDateKey,
+  getWeekKey,
+  isSameDay,
+} from "./utils/helpers.js";
+import {
+  updateExecutionEngine,
+  updateCurrentTask,
+  renderSchedule,
+} from "./engine/execution.js";
+import { updateScores, updateTimeHonesty } from "./engine/scoring.js";
+import {
+  updateDisciplineState,
+  calculateConsistencyRate,
+  updateCognitiveLoad,
+  updateBurnoutRisk,
+} from "./engine/discipline.js";
+import { updatePsychology, setupDOM } from "./ui/components.js";
+import {
+  openModal,
+  closeModal,
+  showNotification,
+  showMessageModal,
+} from "./ui/modals.js";
+import {
+  enterFocusMode,
+  enterLockdownMode,
+  exitFocusMode,
+  startFocusTimer,
+  startLockdownTimer,
+  exitLockdownMode,
+} from "./engine/modes.js";
+import {
+  setupEventListeners,
+  handleKeyboardShortcuts,
+  updateTime,
+  checkDailyReset,
+  performDailyReset,
+} from "./core/events.js";
 
 class LifeOSV2 {
   constructor() {
     // System State
     this.state = { ...defaultState };
 
-    // Schedule Template (Hardcoded - Non-negotiable)
-    this.scheduleTemplate = scheduleTemplate;
+    // Schedule Engine (Dynamic)
+    this.scheduleEngine = scheduleEngine;
 
     // Psychological Messages
     this.messages = messages;
@@ -193,14 +187,19 @@ class LifeOSV2 {
 
   completeTask() {
     const now = new Date();
-    const dayOfWeek = now.getDay();
     const dateKey = getDateKey(now);
 
     // Find current task
-    const tasks = this.scheduleTemplate[dayOfWeek];
+    const tasks = this.scheduleEngine.getScheduleForDate(now);
     const currentTask = this.findCurrentTask(tasks, now);
 
     if (currentTask) {
+      // Check if already completed
+      if (this.state.completedTasks[dateKey]?.[currentTask.id]) {
+        this.showNotification("Task already completed", "warning");
+        return;
+      }
+
       // Mark as completed
       if (!this.state.completedTasks[dateKey]) {
         this.state.completedTasks[dateKey] = {};
@@ -223,18 +222,17 @@ class LifeOSV2 {
 
   logFailure(taskId = null) {
     const now = new Date();
-    const dayOfWeek = now.getDay();
     const dateKey = getDateKey(now);
 
     let taskToFail;
 
     if (taskId) {
       // Find specific task
-      const tasks = this.scheduleTemplate[dayOfWeek];
+      const tasks = this.scheduleEngine.getScheduleForDate(now);
       taskToFail = tasks.find((t) => t.id === taskId);
     } else {
       // Find current task
-      const tasks = this.scheduleTemplate[dayOfWeek];
+      const tasks = this.scheduleEngine.getScheduleForDate(now);
       taskToFail = this.findCurrentTask(tasks, now);
     }
 
@@ -408,7 +406,7 @@ class LifeOSV2 {
 
       weeklyScore += this.state.scores.dailyHistory?.[key] || 0;
 
-      const tasks = this.scheduleTemplate[dayOfWeek];
+      const tasks = this.scheduleEngine.getScheduleForDate(date);
       tasks.forEach((task) => {
         if (!task.optional) {
           totalTasks++;
@@ -552,18 +550,21 @@ class LifeOSV2 {
     newDate.setDate(newDate.getDate() + delta);
     this.state.selectedDate = newDate;
     this.updateExecutionEngine();
+    this.updateTime();
   }
 
   goToToday() {
     this.state.selectedDate = new Date();
     this.updateExecutionEngine();
+    this.updateTime();
     this.showNotification("Returned to today", "success");
   }
 
   selectTask(taskId) {
     // Find task
-    const dayOfWeek = this.state.selectedDate.getDay();
-    const tasks = this.scheduleTemplate[dayOfWeek];
+    const tasks = this.scheduleEngine.getScheduleForDate(
+      this.state.selectedDate
+    );
     const task = tasks.find((t) => t.id === taskId);
 
     if (task) {
@@ -584,7 +585,12 @@ class LifeOSV2 {
     return showNotification.call(this, message, type);
   }
 
-  showMessageModal(message, title = "SYSTEM MESSAGE", onConfirm = null, onCancel = null) {
+  showMessageModal(
+    message,
+    title = "SYSTEM MESSAGE",
+    onConfirm = null,
+    onCancel = null
+  ) {
     return showMessageModal.call(this, message, title, onConfirm, onCancel);
   }
 

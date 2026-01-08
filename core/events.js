@@ -1,6 +1,6 @@
 // Event Handlers and System Functions
 
-import { getDateKey } from '../utils/helpers.js';
+import { getDateKey } from "../utils/helpers.js";
 
 export function setupEventListeners() {
   // Task actions
@@ -24,9 +24,7 @@ export function setupEventListeners() {
   this.elements.lockdownBtn.addEventListener("click", () =>
     this.enterLockdownMode()
   );
-  this.elements.exitFocus.addEventListener("click", () =>
-    this.exitFocusMode()
-  );
+  this.elements.exitFocus.addEventListener("click", () => this.exitFocusMode());
 
   // Modals
   this.elements.settingsBtn.addEventListener("click", () =>
@@ -108,9 +106,7 @@ export function setupEventListeners() {
   });
 
   // Keyboard shortcuts
-  document.addEventListener("keydown", (e) =>
-    this.handleKeyboardShortcuts(e)
-  );
+  document.addEventListener("keydown", (e) => this.handleKeyboardShortcuts(e));
 
   // Update time every minute
   setInterval(() => this.updateTime(), 60000);
@@ -173,7 +169,7 @@ export function updateTime() {
     .toString()
     .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
 
-  // Update day name
+  // Update day name based on selected date
   const days = [
     "SUNDAY",
     "MONDAY",
@@ -183,7 +179,7 @@ export function updateTime() {
     "FRIDAY",
     "SATURDAY",
   ];
-  this.elements.currentDay.textContent = days[now.getDay()];
+  this.elements.currentDay.textContent = days[this.state.selectedDate.getDay()];
 }
 
 export function checkDailyReset() {

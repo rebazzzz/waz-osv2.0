@@ -13,7 +13,7 @@ export function updateScores() {
   let dailyScore = 0;
   let dailyPossible = 0;
 
-  const tasks = this.scheduleTemplate[dayOfWeek];
+  const tasks = this.scheduleEngine.getScheduleForDate(this.state.selectedDate);
   tasks.forEach((task) => {
     const baseXP = task.baseXP || 10;
     const difficulty = task.difficulty || 1.0;
