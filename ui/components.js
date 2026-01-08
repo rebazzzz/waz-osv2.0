@@ -95,5 +95,7 @@ export function setupDOM() {
     warRoomModal: get("war-room-modal"),
     failureModal: get("failure-modal"),
     emergencyModal: get("emergency-modal"),
+    failureTaskTitle: get("failure-task-title"),
+    penaltyPoints: get("penalty-points"),
   };
 }

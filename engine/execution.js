@@ -82,10 +82,8 @@ export function updateCurrentTask(tasks, now) {
       if (this.elements.currentTaskStatus)
         this.elements.currentTaskStatus.style.color = "var(--danger-color)";
 
-      // Auto-fail if brutal mode enabled
-      if (this.state.settings.brutalMode && timeLeft < -5) {
-        this.autoFailTask(currentTask);
-      }
+      // Auto-fail overdue tasks
+      this.autoFailTask(currentTask);
     } else if (isCompleted) {
       this.elements.currentTaskStatus.textContent = "COMPLETED";
       if (this.elements.currentTaskStatus)
@@ -170,6 +168,11 @@ export function renderSchedule(tasks, now) {
     if (isFailed) classes.push("failed");
     if (isMissed) classes.push("missed");
 
+    // Determine status text
+    let statusText = "";
+    if (isCompleted) statusText = "COMPLETED";
+    else if (isFailed) statusText = "FAILED";
+
     html += `
               <div class="${classes.join(" ")}" data-task-id="${task.id}">
                   <div class="item-header">
@@ -177,6 +180,7 @@ export function renderSchedule(tasks, now) {
                       <div class="item-xp">${totalXP} XP</div>
                   </div>
                   <div class="item-title">${task.title}</div>
+                  <div class="item-status">${statusText}</div>
                   <div class="item-progress">
                       <div class="progress-fill" style="width: ${progress}%"></div>
                   </div>
