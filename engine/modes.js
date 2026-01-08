@@ -30,7 +30,7 @@ export function enterLockdownMode() {
 
       // Update lockdown display
       const now = new Date();
-      const tasks = this.scheduleTemplate[now.getDay()];
+      const tasks = this.scheduleEngine.getScheduleForDate(now);
       const currentTask = this.findCurrentTask(tasks, now);
 
       if (currentTask) {
